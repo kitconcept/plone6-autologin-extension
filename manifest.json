@@ -11,5 +11,5 @@
   "browser_action": {
     "default_icon": "logo128.png"
   },
-  "permissions": ["activeTab", "cookies", "http://*/*"]
+  "permissions": ["activeTab", "cookies", "http://*/*", "https://*/*"]
 }
