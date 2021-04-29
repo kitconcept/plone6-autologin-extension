@@ -71,7 +71,7 @@ userAgentHandler.browserAction.onClicked.addListener(function (tab) {
         apiPath: "http://localhost:55001/plone",
         dev: true,
         user: "admin",
-        password: "admin",
+        password: "secret",
       });
     });
   });
