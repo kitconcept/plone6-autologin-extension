@@ -1,4 +1,8 @@
 function login({ tab, apiPath, dev, user, password }) {
+  const currentBrowser = navigator.userAgent;
+  const userAgentHandler =
+    currentBrowser.indexOf("Firefox") != -1 ? browser : chrome;
+
   return fetch(`${apiPath}/@login`, {
     cache: "no-cache",
     headers: {
@@ -13,7 +17,7 @@ function login({ tab, apiPath, dev, user, password }) {
     })
     .then((data) => {
       if (dev) {
-        chrome.cookies.set({
+        userAgentHandler.cookies.set({
           url: "http://localhost:3000/",
           domain: "localhost",
           name: "auth_token",
@@ -21,7 +25,7 @@ function login({ tab, apiPath, dev, user, password }) {
           value: data.token,
         });
       } else {
-        chrome.cookies.set({
+        userAgentHandler.cookies.set({
           url: getServerName(apiPath),
           domain: getHostName(apiPath),
           name: "auth_token",
@@ -29,7 +33,7 @@ function login({ tab, apiPath, dev, user, password }) {
           value: data.token,
         });
       }
-      chrome.tabs.reload(tab.id);
+      userAgentHandler.tabs.reload(tab.id);
     });
 }
 
@@ -43,7 +47,11 @@ function getServerName(url) {
   return parsedURL.origin;
 }
 
-chrome.browserAction.onClicked.addListener(function (tab) {
+const currentBrowser = navigator.userAgent;
+const userAgentHandler =
+  currentBrowser.indexOf("Firefox") != -1 ? browser : chrome;
+
+userAgentHandler.browserAction.onClicked.addListener(function (tab) {
   login({
     tab,
     apiPath: `${getServerName(tab.url)}/api`,
