@@ -3,7 +3,7 @@ function login({ tab, apiPath, dev, user, password }) {
   const userAgentHandler =
     currentBrowser.indexOf("Firefox") != -1 ? browser : chrome;
 
-  return fetch(`${apiPath}/@login`, {
+  return fetch(`${apiPath}/++api++/@login`, {
     cache: "no-cache",
     headers: {
       Accept: "application/json",
@@ -13,7 +13,7 @@ function login({ tab, apiPath, dev, user, password }) {
     body: JSON.stringify({ login: user, password }),
   })
     .then(function (response) {
-      return response.json();
+      if (response.ok) return response.json();
     })
     .then((data) => {
       if (dev) {
@@ -27,7 +27,6 @@ function login({ tab, apiPath, dev, user, password }) {
       } else {
         userAgentHandler.cookies.set({
           url: getServerName(apiPath),
-          domain: getHostName(apiPath),
           name: "auth_token",
           path: "/",
           value: data.token,
@@ -61,17 +60,25 @@ userAgentHandler.browserAction.onClicked.addListener(function (tab) {
   }).catch((error) => {
     login({
       tab,
-      apiPath: "http://localhost:8080/Plone",
-      dev: true,
+      apiPath: `${getServerName(tab.url)}`,
+      dev: false,
       user: "admin",
       password: "admin",
     }).catch((error) => {
       login({
         tab,
-        apiPath: "http://localhost:55001/plone",
+        apiPath: "http://localhost:8080/Plone",
         dev: true,
         user: "admin",
-        password: "secret",
+        password: "admin",
+      }).catch((error) => {
+        login({
+          tab,
+          apiPath: "http://localhost:55001/plone",
+          dev: true,
+          user: "admin",
+          password: "secret",
+        });
       });
     });
   });
