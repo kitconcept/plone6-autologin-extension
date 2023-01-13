@@ -17,3 +17,6 @@ Just click on the extension button (Volto logo icon). If the request goes well, 
 3. Enable development mode
 4. Add a new extension (`Load unpacked`) and point the browser to the location you've cloned the repo.
 5. Add the extension button to your extension buttons pins
+
+## Firefox
+https://addons.mozilla.org/en-US/firefox/addon/plone-6-autologin-extension/
